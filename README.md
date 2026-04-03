@@ -51,7 +51,7 @@ A backend system for managing financial records with role-based access control a
 ##  Setup Instructions
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/nitish1238/finance-dashboard-backend.git
 cd finance_dashboard
 
 python -m venv venv
