@@ -12,7 +12,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             'transaction_type', 'category', 'date', 'description',
             'notes', 'created_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at', 'updated_at','user']
     
     def get_formatted_amount(self, obj):
         return f"${obj.amount:,.2f}"
@@ -21,25 +21,31 @@ class TransactionSerializer(serializers.ModelSerializer):
         transaction_type = data.get('transaction_type')
         category = data.get('category')
 
-        if transaction_type and category:                         
-            valid_categories = dict(Transaction.CATEGORIES[transaction_type])
-            if category not in valid_categories:
-                raise serializers.ValidationError(
-                    f"Invalid category for {transaction_type}. "
-                    f"Valid categories: {', '.join(valid_categories.keys())}"
-                )
+    
+        if transaction_type and category:
+            category_dict = dict(Transaction.CATEGORIES)
 
-        if transaction_type == 'expense' and data.get('amount', 0) > 10000:
-            raise serializers.ValidationError(
-            {"amount": "Large expense (> $10,000) requires additional approval"}
-        )
+        
+            if transaction_type in category_dict:
+                valid_categories = dict(category_dict[transaction_type])
+
+            
+                if category not in valid_categories:
+                    raise serializers.ValidationError({
+                        "category": f"{category} is not valid for {transaction_type}"
+                    })
+
+    
+        if transaction_type == 'expense':
+            amount = data.get('amount') or 0
+            if float(amount) > 10000:
+                raise serializers.ValidationError({
+                    "amount": "Large expense (> 10000) not allowed"
+                })
 
         return data
-
-class TransactionCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Transaction
+class TransactionCreateSerializer(TransactionSerializer):
+    class Meta(TransactionSerializer.Meta):
         fields = ['amount', 'transaction_type', 'category', 'date', 'description', 'notes']
     
-    def validate(self, data):
-        return super().validate(data)
+    
