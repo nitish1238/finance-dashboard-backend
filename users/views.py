@@ -101,7 +101,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def profile(self, request):
         """Get or update current user profile"""
         if request.method == 'GET':
-            serializer = self.get_serializer(request.user)
+            serializer = UserSerializer(request.user)
             return Response(serializer.data)
         
         elif request.method == 'PATCH':
@@ -183,3 +183,5 @@ class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
     permission_classes = [AllowAny]
+    def perform_create(self, serializer):
+        serializer.save(role='viewer')

@@ -57,9 +57,10 @@ class TransactionViewSet(viewsets.ModelViewSet):
         
         # Format response
         for key in ['total_income', 'total_expense']:
-            stats[key]['total'] = stats[key]['total'] or 0
-            stats[key]['avg'] = stats[key]['avg'] or 0
-        
+            stats[key]['total'] = stats[key]['total'] or Decimal('0')  # ← consistent Decimal
+            stats[key]['avg']   = stats[key]['avg']   or Decimal('0')
+            stats[key]['count'] = stats[key]['count'] or 0
+
         stats['net_balance'] = stats['total_income']['total'] - stats['total_expense']['total']
         
         return Response(stats)

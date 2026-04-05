@@ -28,7 +28,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
     def validate_role(self, value):
         request = self.context.get('request')
         if not request or not request.user.is_authenticated:
-            raise serializers.ValidationError("Authentication required")
+            raise serializers.ValidationError("Authentication required")  # ← fail safe
         if not getattr(request.user, 'is_admin', False):
             raise serializers.ValidationError("Only admin can change user role")
         return value

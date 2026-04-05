@@ -69,10 +69,10 @@ class DashboardViewSet(viewsets.GenericViewSet):
         
         for i in range(months - 1, -1, -1):
             month_start = (today.replace(day=1) - relativedelta(months=i))
-        if month_start.month == 12:
-            month_end = month_start.replace(year=month_start.year + 1, month=1, day=1) - timedelta(days=1)
-        else:
-            month_end = month_start.replace(month=month_start.month + 1, day=1) - timedelta(days=1)
+            if month_start.month == 12:
+                month_end = month_start.replace(year=month_start.year + 1, month=1, day=1) - timedelta(days=1)
+            else:
+                month_end = month_start.replace(month=month_start.month + 1, day=1) - timedelta(days=1)
             
             month_transactions = transactions.filter(
                 date__gte=month_start, date__lte=month_end

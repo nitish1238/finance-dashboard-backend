@@ -23,11 +23,11 @@ class TransactionSerializer(serializers.ModelSerializer):
 
         if transaction_type and category:                         
             valid_categories = dict(Transaction.CATEGORIES[transaction_type])
-        if category not in valid_categories:
-            raise serializers.ValidationError(
-                f"Invalid category for {transaction_type}. "
-                f"Valid categories: {', '.join(valid_categories.keys())}"
-            )
+            if category not in valid_categories:
+                raise serializers.ValidationError(
+                    f"Invalid category for {transaction_type}. "
+                    f"Valid categories: {', '.join(valid_categories.keys())}"
+                )
 
         if transaction_type == 'expense' and data.get('amount', 0) > 10000:
             raise serializers.ValidationError(
