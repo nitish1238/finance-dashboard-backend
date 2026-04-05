@@ -210,12 +210,8 @@ POST /api/records/
 
 ##  Deployment
 
-👉 (Add your deployed link here)
-
-Example:
-
 ```
-Live API: https://your-api-url.com
+Live API: https://finance-dashboard-backend-jv22.onrender.com
 ```
 
 ---
