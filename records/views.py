@@ -26,7 +26,7 @@ class TransactionViewSet(ModelViewSet):
         else:
             queryset = Transaction.objects.filter(user=user)
 
-    
+   
         category = self.request.query_params.get('category')
         start_date = self.request.query_params.get('start_date')
         end_date = self.request.query_params.get('end_date')
@@ -52,9 +52,9 @@ class TransactionViewSet(ModelViewSet):
 
         if search:
             queryset = queryset.filter(
-                Q(description__icontains=search) |
-                Q(notes__icontains=search)
-            )
+            Q(description__icontains=search) |
+            Q(notes__icontains=search)
+        )
 
         return queryset
 

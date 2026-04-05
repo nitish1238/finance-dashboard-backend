@@ -89,13 +89,15 @@ class UserViewSet(viewsets.ModelViewSet):
         return UserSerializer
     
     def get_queryset(self):
-        queryset = super().get_queryset()
-        
-        
-        if not getattr(self.request.user, 'is_admin', False):
-            queryset = queryset.filter(id=self.request.user.id)
-        
-        return queryset
+        user = self.request.user
+
+        if not user.is_authenticated:
+            return User.objects.none()
+
+        if getattr(user, "role", None) == 'admin':
+            return User.objects.all()
+
+        return User.objects.filter(id=user.id)
     
     @action(detail=False, methods=['get', 'patch'], url_path='profile', permission_classes=[IsAuthenticated])
     def profile(self, request):

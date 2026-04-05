@@ -41,19 +41,13 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        validated_data.pop('confirm_password')
         password = validated_data.pop('password')
-        role = validated_data.pop('role', 'viewer')
-        username = validated_data.pop('username')
-        email = validated_data.pop('email')
+        validated_data.pop('confirm_password', None)
 
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password,
-            role=role,
-            **validated_data
-        )
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+
         return user
 
 
