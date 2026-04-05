@@ -1,4 +1,3 @@
-
 from rest_framework import viewsets, status, filters
 from rest_framework import generics
 from rest_framework.decorators import action
@@ -92,8 +91,8 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         
-        # Non-admin users can only see themselves
-        if not self.request.user.is_admin:
+        # FIX #1: Safe is_admin check
+        if not getattr(self.request.user, 'is_admin', False):
             queryset = queryset.filter(id=self.request.user.id)
         
         return queryset
@@ -137,7 +136,8 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'], url_path='activate')
     def activate(self, request, pk=None):
         """Activate user (admin only)"""
-        if not request.user.is_admin:
+        # FIX #2: Safe is_admin check
+        if not getattr(request.user, 'is_admin', False):
             return Response(
                 {'error': 'Permission denied'}, 
                 status=status.HTTP_403_FORBIDDEN
@@ -151,14 +151,23 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'], url_path='deactivate')
     def deactivate(self, request, pk=None):
         """Deactivate user (admin only)"""
-        if not request.user.is_admin:
+        # FIX #3: Safe is_admin check
+        if not getattr(request.user, 'is_admin', False):
             return Response(
                 {'error': 'Permission denied'}, 
                 status=status.HTTP_403_FORBIDDEN
             )
         
         user = self.get_object()
-        if user.is_admin:
+        
+        # FIX #4: Prevent self-deactivation
+        if user == request.user:
+            return Response(
+                {'error': 'Cannot deactivate your own account'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if getattr(user, 'is_admin', False):
             return Response(
                 {'error': 'Cannot deactivate admin user'}, 
                 status=status.HTTP_400_BAD_REQUEST
@@ -167,6 +176,10 @@ class UserViewSet(viewsets.ModelViewSet):
         user.is_active = False
         user.save()
         return Response({'message': 'User deactivated successfully'})
+
+
+# FIX #5: Either delete this OR keep it (choose one)
+# If you keep it, you'll have two registration endpoints
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
