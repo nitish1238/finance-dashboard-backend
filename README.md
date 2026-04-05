@@ -208,11 +208,11 @@ POST /api/records/
 
 ---
 
-## 🌐 Deployment
+##  Deployment
 Base URL:  
 https://finance-dashboard-backend-jv22.onrender.com  
 
-### 📄 API Documentation (Swagger)  
+###  API Documentation (Swagger)  
 https://finance-dashboard-backend-jv22.onrender.com/api/docs/
 
 ##  Assumptions
