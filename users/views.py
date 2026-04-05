@@ -97,13 +97,13 @@ class UserViewSet(viewsets.ModelViewSet):
         
         return queryset
     
-    @action(detail=False, methods=['get', 'patch'], url_path='profile')
+    @action(detail=False, methods=['get', 'patch'], url_path='profile', permission_classes=[IsAuthenticated])
     def profile(self, request):
         """Get or update current user profile"""
         if request.method == 'GET':
             serializer = UserSerializer(request.user)
             return Response(serializer.data)
-        
+    
         elif request.method == 'PATCH':
             serializer = UserUpdateSerializer(
                 request.user, 
@@ -115,22 +115,22 @@ class UserViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data)
     
-    @action(detail=False, methods=['post'], url_path='change-password')
+    @action(detail=False, methods=['post'], url_path='change-password', permission_classes=[IsAuthenticated])
     def change_password(self, request):
         """Change user password"""
         serializer = ChangePasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
+    
         user = request.user
         if not user.check_password(serializer.validated_data['old_password']):
             return Response(
-                {'old_password': 'Wrong password'}, 
+                { 'old_password': 'Wrong password'}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
+    
         user.set_password(serializer.validated_data['new_password'])
         user.save()
-        
+    
         return Response({'message': 'Password changed successfully'})
     
     @action(detail=True, methods=['post'], url_path='activate')

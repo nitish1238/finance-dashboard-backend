@@ -114,12 +114,11 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return data
 
     def validate_role(self, value):
-        # Role assignment is controlled by the view (RegisterView forces 'viewer',
-        # UserViewSet allows admin to set any role). Serializer just passes it through.
         request = self.context.get('request')
         if request and request.user.is_authenticated:
             if not getattr(request.user, 'is_admin', False):
                 raise serializers.ValidationError("Only admin can change user role")
+    
         return value
 
     def create(self, validated_data):
