@@ -86,8 +86,8 @@ finance-dashboard-backend/
 ├── users/           # User & role management
 ├── records/         # Financial records
 ├── dashboard/       # Analytics APIs
-├── permissions/     # Role-based access logic
-├── config/          # Settings & main config
+├── core/            # Role-based access logic
+├── finance_dashboard/  # Settings & main config
 └── manage.py
 ```
 
@@ -98,8 +98,8 @@ finance-dashboard-backend/
 ### 1. Clone Repository
 
 ```
-git clone <your-repo-link>
-cd finance-dashboard-backend
+git clone <https://github.com/nitish1238/finance-dashboard-backend.git>
+cd finance-dashboard
 ```
 
 ### 2. Create Virtual Environment
@@ -139,53 +139,98 @@ python manage.py runserver
 
 ---
 
-##  API Endpoints (Examples)
+##  API Endpoints
 
 ### Auth
 
 ```
-POST /api/auth/login/
-POST /api/auth/register/
+POST /api/users/register/          # Register new user (always assigned viewer role)
+POST /api/users/auth/login/        # Login and receive JWT tokens
+POST /api/users/auth/refresh/      # Refresh access token
 ```
 
-### Users (Admin only)
+### Users
 
 ```
-GET    /api/users/
-POST   /api/users/
-PATCH  /api/users/{id}/
-DELETE /api/users/{id}/
+GET    /api/users/                  # List users (admin sees all, others see self only)
+POST   /api/users/                  # Create user (admin only)
+GET    /api/users/{id}/             # Retrieve user
+PATCH  /api/users/{id}/             # Update user
+DELETE /api/users/{id}/             # Delete user (admin only)
+
+GET    /api/users/profile/          # Get current user profile
+PATCH  /api/users/profile/          # Update current user profile
+
+POST   /api/users/change-password/  # Change password
+POST   /api/users/{id}/activate/    # Activate user (admin only)
+POST   /api/users/{id}/deactivate/  # Deactivate user (admin only)
 ```
 
 ### Financial Records
 
 ```
-GET    /api/records/
-POST   /api/records/
-PUT    /api/records/{id}/
-DELETE /api/records/{id}/
+GET    /api/records/                # List transactions (filtered by role)
+POST   /api/records/                # Create transaction (analyst/admin only)
+GET    /api/records/{id}/           # Retrieve transaction
+PUT    /api/records/{id}/           # Update transaction (analyst/admin only)
+PATCH  /api/records/{id}/           # Partial update
+DELETE /api/records/{id}/           # Delete transaction (admin only)
+
+GET    /api/records/categories/     # List all available categories
+GET    /api/records/statistics/     # Aggregated income/expense statistics
+```
+
+#### Filtering & Search
+
+```
+GET /api/records/?transaction_type=income
+GET /api/records/?category=salary
+GET /api/records/?start_date=2026-01-01&end_date=2026-03-31
+GET /api/records/?min_amount=1000&max_amount=5000
+GET /api/records/?search=salary
+GET /api/records/?ordering=-date
 ```
 
 ### Dashboard
 
 ```
-GET /api/dashboard/summary/
-GET /api/dashboard/trends/
-GET /api/dashboard/category-breakdown/
+GET /api/dashboard/summary/            # Total income, expenses, net balance
+GET /api/dashboard/category-breakdown/ # Totals grouped by category
+GET /api/dashboard/monthly-trends/     # Income/expense trends per month
+GET /api/dashboard/recent-activity/    # Latest transactions
+GET /api/dashboard/financial-health/   # Savings rate, top categories
+```
+
+### Docs
+
+```
+GET /api/docs/      # Swagger UI
+GET /api/schema/    # OpenAPI schema
 ```
 
 ---
 
 ## 🔍 Example Request
 
-### Create Record
+### Login
+
+```json
+POST /api/users/auth/login/
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+```
+
+### Create Transaction
 
 ```json
 POST /api/records/
 
 {
   "amount": 5000,
-  "type": "income",
+  "transaction_type": "income",
   "category": "salary",
   "date": "2026-04-01",
   "description": "Monthly salary"
@@ -196,51 +241,77 @@ POST /api/records/
 
 ##  Example Response
 
+### Login Response
+
+```json
+{
+  "access": "<access_token>",
+  "refresh": "<refresh_token>",
+  "user": {
+    "id": 1,
+    "username": "admin",
+    "email": "admin@example.com",
+    "role": "admin"
+  }
+}
+```
+
+### Create Transaction Response
+
 ```json
 {
   "id": 1,
-  "amount": 5000,
-  "type": "income",
+  "amount": "5000.00",
+  "formatted_amount": "$5,000.00",
+  "transaction_type": "income",
   "category": "salary",
-  "date": "2026-04-01"
+  "date": "2026-04-01",
+  "description": "Monthly salary",
+  "notes": "",
+  "created_at": "2026-04-01T10:00:00Z"
 }
 ```
 
 ---
 
 ##  Deployment
-### Base URL:  
-https://finance-dashboard-backend-jv22.onrender.com  
 
-###  API Documentation (Swagger)  
+### Base URL
+https://finance-dashboard-backend-jv22.onrender.com
+
+###  API Documentation (Swagger)
 https://finance-dashboard-backend-jv22.onrender.com/api/docs/
+
+---
 
 ##  Assumptions
 
-* SQLite used for simplicity
+* SQLite used for simplicity (can be swapped to PostgreSQL)
 * Authentication handled via JWT
-* Roles are predefined (Admin, Analyst, Viewer)
+* Roles are predefined: Admin, Analyst, Viewer
+* Public registration always assigns viewer role — admin role can only be assigned by an existing admin
 * System designed for demonstration, not production
 
 ---
 
 ##  Design Decisions
 
-* Separated apps for modular structure
-* Used DRF for fast API development
-* Implemented role-based permissions for security
+* Separated apps (users, records, dashboard, core) for modular structure
+* Used DRF for fast and consistent API development
+* Role-based permissions enforced at both view and object level
+* Dashboard analytics kept separate from records to allow independent scaling
 * Focused on clarity and maintainability over complexity
 
 ---
 
 ##  Future Improvements
 
-* Swagger API documentation
 * Unit & integration tests
 * PostgreSQL database
 * Docker support
 * Caching for dashboard APIs
 * Rate limiting
+* Soft delete for transactions
 
 ---
 

@@ -7,6 +7,8 @@ from .models import Transaction
 from .serializers import TransactionSerializer, TransactionCreateSerializer
 from .filters import TransactionFilter
 from core.permissions import RoleBasedPermission
+# Add this at the top of records/views.py
+from decimal import Decimal
 
 class TransactionViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, RoleBasedPermission]
