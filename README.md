@@ -1,112 +1,139 @@
-#  Finance Dashboard Backend
+# 🚀 Finance Dashboard Backend
 
 A backend system for managing financial records with role-based access control and dashboard analytics.
-Built to demonstrate backend architecture, API design, and business logic implementation.
+This project demonstrates backend architecture, API design, and business logic implementation using Django REST Framework.
 
 ---
 
-##  Features
+## 📌 Overview
 
-###  Authentication & User Management
+This project implements a finance dashboard backend where different users interact with financial data based on roles.
 
-* JWT-based authentication
-* User registration & login
-* Role-based access:
+It demonstrates:
 
-  * Admin – Full access (users + records)
-  * Analyst – View + analyze data
-  * Viewer – Read-only access
-* User activation/deactivation
+* Clean REST API design using Django REST Framework
+* Role-based access control (RBAC)
+* Financial data processing and aggregation
+* Scalable and modular backend structure
 
 ---
 
-###  Financial Records Management
+## 🎯 Key Highlights
 
-* Create, update, delete financial records
+* ✅ Fully test-driven backend (**98/98 tests passing**)
+* 🔐 Role-based permissions (Admin / Analyst / Viewer)
+* 📊 Dashboard analytics (trends, breakdowns, insights)
+* 🔍 Advanced filtering, search, and sorting
+* 🌐 Deployed API with Swagger documentation
+
+---
+
+## 👥 User Roles
+
+| Role        | Permissions                                |
+| ----------- | ------------------------------------------ |
+| **Admin**   | Full access (manage users + all records)   |
+| **Analyst** | Create & view own transactions + analytics |
+| **Viewer**  | Read-only access                           |
+
+---
+
+## 💰 Features
+
+### 1. Financial Records Management
+
+* Create, update, delete transactions
 * Fields:
 
   * Amount
   * Type (Income / Expense)
   * Category
   * Date
-  * Description
-* Filtering:
-
-  * By date range
-  * Category
-  * Type
-* Search + Pagination support
+  * Description / Notes
 
 ---
 
-###  Dashboard Analytics
+### 2. Filtering & Search
+
+* Filter by:
+
+  * Date range
+  * Category
+  * Transaction type
+  * Amount range
+* Search by description/notes
+* Sorting support
+
+---
+
+### 3. Dashboard Analytics
 
 * Total income
 * Total expenses
 * Net balance
 * Category-wise breakdown
-* Recent transactions
+* Recent activity
 * Monthly trends
+* Financial health insights
 
 ---
 
-###  Access Control
+### 4. Access Control
 
-* Strict role-based permissions
-* Middleware/permission classes enforce rules:
-
-  * Viewer → read-only
-  * Analyst → read + analytics
-  * Admin → full control
+* Strict role-based permissions enforced at backend
+* Viewer → read-only
+* Analyst → limited create/update
+* Admin → full control
 
 ---
 
-###  Validation & Error Handling
+### 5. Validation & Error Handling
 
 * Input validation using serializers
 * Proper HTTP status codes
-* Meaningful error responses
+* Clear and meaningful error messages
 
 ---
 
-##  Tech Stack
+## 🛠 Tech Stack
 
-* Backend: Django, Django REST Framework
-* Authentication: JWT
-* Database: SQLite (for simplicity)
-* Language: Python
+* **Backend:** Django, Django REST Framework
+* **Authentication:** JWT
+* **Database:** SQLite (for simplicity)
+* **Language:** Python
 
 ---
 
-##  Project Structure
+## 📂 Project Structure
 
 ```
 finance-dashboard-backend/
 │
-├── users/           # User & role management
-├── records/         # Financial records
-├── dashboard/       # Analytics APIs
-├── core/            # Role-based access logic
-├── finance_dashboard/  # Settings & main config
+├── users/              # User & role management
+├── records/            # Financial transactions
+├── dashboard/          # Analytics APIs
+├── core/               # Access control logic
+├── finance_dashboard/  # Settings & configuration
 └── manage.py
 ```
 
 ---
 
-##  Setup Instructions
+## ⚙️ Setup Instructions
 
 ### 1. Clone Repository
 
 ```
-git clone <https://github.com/nitish1238/finance-dashboard-backend.git>
-cd finance-dashboard
+git clone https://github.com/nitish1238/finance-dashboard-backend.git
+cd finance-dashboard-backend
 ```
 
 ### 2. Create Virtual Environment
 
 ```
 python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
+venv\Scripts\activate   # Windows
+# source venv/bin/activate  # Linux/Mac
 ```
 
 ### 3. Install Dependencies
@@ -129,83 +156,93 @@ python manage.py runserver
 
 ---
 
-## 🔑 Sample Users (for testing)
+## 🧪 Testing
 
-| Role    | Username | Password |
-| ------- | -------- | -------- |
-| Admin   | admin    | admin123 |
-| Analyst | analyst  | test123  |
-| Viewer  | viewer   | test123  |
+All backend tests pass successfully:
+
+```
+python manage.py test
+```
+
+✅ **98/98 tests passing**
 
 ---
 
-##  API Endpoints
+## 📡 API Endpoints
 
-### Auth
-
-```
-POST /api/users/register/          # Register new user (always assigned viewer role)
-POST /api/users/auth/login/        # Login and receive JWT tokens
-POST /api/users/auth/refresh/      # Refresh access token
-```
-
-### Users
+### 🔐 Authentication
 
 ```
-GET    /api/users/                  # List users (admin sees all, others see self only)
-POST   /api/users/                  # Create user (admin only)
-GET    /api/users/{id}/             # Retrieve user
-PATCH  /api/users/{id}/             # Update user
-DELETE /api/users/{id}/             # Delete user (admin only)
-
-GET    /api/users/profile/          # Get current user profile
-PATCH  /api/users/profile/          # Update current user profile
-
-POST   /api/users/change-password/  # Change password
-POST   /api/users/{id}/activate/    # Activate user (admin only)
-POST   /api/users/{id}/deactivate/  # Deactivate user (admin only)
+POST /api/users/register/
+POST /api/users/auth/login/
+POST /api/users/auth/refresh/
 ```
 
-### Financial Records
+---
+
+### 👤 Users
 
 ```
-GET    /api/records/                # List transactions (filtered by role)
-POST   /api/records/                # Create transaction (analyst/admin only)
-GET    /api/records/{id}/           # Retrieve transaction
-PUT    /api/records/{id}/           # Update transaction (analyst/admin only)
-PATCH  /api/records/{id}/           # Partial update
-DELETE /api/records/{id}/           # Delete transaction (admin only)
+GET    /api/users/
+POST   /api/users/
+GET    /api/users/{id}/
+PATCH  /api/users/{id}/
+DELETE /api/users/{id}/
 
-GET    /api/records/categories/     # List all available categories
-GET    /api/records/statistics/     # Aggregated income/expense statistics
+GET    /api/users/profile/
+PATCH  /api/users/profile/
+
+POST   /api/users/change-password/
+POST   /api/users/{id}/activate/
+POST   /api/users/{id}/deactivate/
 ```
 
-#### Filtering & Search
+---
+
+### 💰 Financial Records
 
 ```
-GET /api/records/?transaction_type=income
-GET /api/records/?category=salary
-GET /api/records/?start_date=2026-01-01&end_date=2026-03-31
-GET /api/records/?min_amount=1000&max_amount=5000
-GET /api/records/?search=salary
-GET /api/records/?ordering=-date
+GET    /api/records/
+POST   /api/records/
+GET    /api/records/{id}/
+PUT    /api/records/{id}/
+PATCH  /api/records/{id}/
+DELETE /api/records/{id}/
+
+GET    /api/records/categories/
+GET    /api/records/statistics/
 ```
 
-### Dashboard
+#### 🔍 Filtering Examples
 
 ```
-GET /api/dashboard/summary/            # Total income, expenses, net balance
-GET /api/dashboard/category-breakdown/ # Totals grouped by category
-GET /api/dashboard/monthly-trends/     # Income/expense trends per month
-GET /api/dashboard/recent-activity/    # Latest transactions
-GET /api/dashboard/financial-health/   # Savings rate, top categories
+/api/records/?transaction_type=income
+/api/records/?category=salary
+/api/records/?start_date=2026-01-01&end_date=2026-03-31
+/api/records/?min_amount=1000&max_amount=5000
+/api/records/?search=salary
+/api/records/?ordering=-date
 ```
 
-### Docs
+---
+
+### 📊 Dashboard
 
 ```
-GET /api/docs/      # Swagger UI
-GET /api/schema/    # OpenAPI schema
+GET /api/dashboard/summary/
+GET /api/dashboard/category-breakdown/
+GET /api/dashboard/monthly-trends/
+GET /api/dashboard/recent-activity/
+GET /api/dashboard/financial-health/
+```
+
+---
+
+### 📚 API Documentation
+
+```
+GET /api/docs/
+GET /api/schema/
 ```
 
 ---
@@ -215,19 +252,17 @@ GET /api/schema/    # OpenAPI schema
 ### Login
 
 ```json
-POST /api/users/auth/login/
-
 {
   "username": "admin",
   "password": "admin123"
 }
 ```
 
+---
+
 ### Create Transaction
 
 ```json
-POST /api/records/
-
 {
   "amount": 5000,
   "transaction_type": "income",
@@ -239,24 +274,7 @@ POST /api/records/
 
 ---
 
-##  Example Response
-
-### Login Response
-
-```json
-{
-  "access": "<access_token>",
-  "refresh": "<refresh_token>",
-  "user": {
-    "id": 1,
-    "username": "admin",
-    "email": "admin@example.com",
-    "role": "admin"
-  }
-}
-```
-
-### Create Transaction Response
+## 📤 Example Response
 
 ```json
 {
@@ -274,60 +292,58 @@ POST /api/records/
 
 ---
 
-##  Deployment
+## 🌐 Deployment
 
-### Base URL
+**Base URL:**
 https://finance-dashboard-backend-jv22.onrender.com
 
-###  API Documentation (Swagger)
+**Swagger Docs:**
 https://finance-dashboard-backend-jv22.onrender.com/api/docs/
 
 ---
 
-##  Assumptions
+## 🧠 Assumptions
 
-* SQLite used for simplicity (can be swapped to PostgreSQL)
-* Authentication handled via JWT
-* Roles are predefined: Admin, Analyst, Viewer
-* Public registration always assigns viewer role — admin role can only be assigned by an existing admin
-* System designed for demonstration, not production
-
----
-
-##  Design Decisions
-
-* Separated apps (users, records, dashboard, core) for modular structure
-* Used DRF for fast and consistent API development
-* Role-based permissions enforced at both view and object level
-* Dashboard analytics kept separate from records to allow independent scaling
-* Focused on clarity and maintainability over complexity
+* Categories are predefined based on transaction type
+* Large expenses (>10000) are restricted
+* Roles are predefined (Admin, Analyst, Viewer)
+* Public registration assigns Viewer role by default
 
 ---
 
-##  Future Improvements
+## ⚙️ Design Decisions
 
-* Unit & integration tests
+* Modular app structure (users, records, dashboard)
+* Role-based permissions enforced at API level
+* Dashboard logic separated for scalability
+* Focus on clarity, maintainability, and clean architecture
+
+---
+
+## 🚀 Future Improvements
+
 * PostgreSQL database
 * Docker support
-* Caching for dashboard APIs
+* Caching (Redis)
 * Rate limiting
-* Soft delete for transactions
+* Soft delete support
 
 ---
 
-##  Author
+## 👨‍💻 Author
 
 **Nitish Kumar**
 
 ---
 
-##  Final Note
+## 📌 Final Note
 
-This project focuses on backend fundamentals:
+This project focuses on:
 
 * Clean API design
 * Logical data handling
 * Role-based access control
-* Scalable structure
+* Scalable backend architecture
 
 ---
+
