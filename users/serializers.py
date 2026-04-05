@@ -25,17 +25,20 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = ['username', 'email', 'password', 'confirm_password', 
                   'first_name', 'last_name', 'role', 'phone']
     
-    def validate(self, data):
-        if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError({"confirm_password": "Passwords do not match"})
-        return data
+    def validate_role(self, value):
+        request = self.context.get('request')
+        if not request or not request.user.is_authenticated:
+            raise serializers.ValidationError("Authentication required")
+        if not getattr(request.user, 'is_admin', False):
+            raise serializers.ValidationError("Only admin can change user role")
+        return value
     
     def create(self, validated_data):
         validated_data.pop('confirm_password')
         password = validated_data.pop('password')
         role = validated_data.pop('role', 'viewer')
         
-        # FIXED: Extract required fields explicitly
+       
         username = validated_data.pop('username')
         email = validated_data.pop('email')
         
@@ -55,7 +58,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     
     def validate_role(self, value):
         request = self.context.get('request')
-        # FIXED: Safer admin check
+        
         if request and request.user.is_authenticated:
             if not getattr(request.user, 'is_admin', False):
                 raise serializers.ValidationError("Only admin can change user role")

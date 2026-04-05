@@ -6,6 +6,8 @@ from django.db.models import Sum, Count, Q
 from django.utils import timezone
 from datetime import timedelta
 from decimal import Decimal
+from django.db.models import Avg
+from dateutil.relativedelta import relativedelta 
 
 class DashboardViewSet(viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
@@ -32,8 +34,8 @@ class DashboardViewSet(viewsets.GenericViewSet):
             'net_balance': total_income - total_expenses,
             'total_transactions': transactions.count(),
             'average_transaction': transactions.aggregate(
-                avg=Sum('amount')/Count('id')
-            )['avg'] or 0
+            avg=Avg('amount')     # ← use Avg() which handles empty sets gracefully
+            )['avg'] or 0,
         })
     
     @action(detail=False, methods=['get'])
@@ -66,17 +68,11 @@ class DashboardViewSet(viewsets.GenericViewSet):
         today = timezone.now().date()
         
         for i in range(months - 1, -1, -1):
-            month_date = today.replace(day=1) - timedelta(days=30 * i)
-            month_start = month_date.replace(day=1)
-            
-            if month_date.month == 12:
-                month_end = month_date.replace(
-                    year=month_date.year + 1, month=1, day=1
-                ) - timedelta(days=1)
-            else:
-                month_end = month_date.replace(
-                    month=month_date.month + 1, day=1
-                ) - timedelta(days=1)
+            month_start = (today.replace(day=1) - relativedelta(months=i))
+        if month_start.month == 12:
+            month_end = month_start.replace(year=month_start.year + 1, month=1, day=1) - timedelta(days=1)
+        else:
+            month_end = month_start.replace(month=month_start.month + 1, day=1) - timedelta(days=1)
             
             month_transactions = transactions.filter(
                 date__gte=month_start, date__lte=month_end

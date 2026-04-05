@@ -18,24 +18,22 @@ class TransactionSerializer(serializers.ModelSerializer):
         return f"${obj.amount:,.2f}"
     
     def validate(self, data):
-        # Validate category based on transaction type
         transaction_type = data.get('transaction_type')
         category = data.get('category')
-        
-        valid_categories = dict(Transaction.CATEGORIES[transaction_type])
-        
+
+        if transaction_type and category:                         
+            valid_categories = dict(Transaction.CATEGORIES[transaction_type])
         if category not in valid_categories:
             raise serializers.ValidationError(
                 f"Invalid category for {transaction_type}. "
                 f"Valid categories: {', '.join(valid_categories.keys())}"
             )
-        
-        # Additional validation for large expenses
+
         if transaction_type == 'expense' and data.get('amount', 0) > 10000:
             raise serializers.ValidationError(
-                {"amount": "Large expense (> $10,000) requires additional approval"}
-            )
-        
+            {"amount": "Large expense (> $10,000) requires additional approval"}
+        )
+
         return data
 
 class TransactionCreateSerializer(serializers.ModelSerializer):

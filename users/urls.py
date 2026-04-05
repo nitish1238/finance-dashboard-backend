@@ -4,8 +4,9 @@ from .views import UserViewSet, AuthViewSet,RegisterView
 
 
 router = DefaultRouter()
-router.register(r'', UserViewSet, basename='user')      # /api/users/
 router.register(r'auth', AuthViewSet, basename='auth')      # /api/auth/
+router.register(r'', UserViewSet, basename='user')      # /api/users/
+
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),

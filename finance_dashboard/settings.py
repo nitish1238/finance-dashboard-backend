@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'dashboard',
     'django_filters',
     'drf_spectacular',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
