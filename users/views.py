@@ -91,7 +91,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         
-        # FIX #1: Safe is_admin check
+        
         if not getattr(self.request.user, 'is_admin', False):
             queryset = queryset.filter(id=self.request.user.id)
         
@@ -136,7 +136,7 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'], url_path='activate')
     def activate(self, request, pk=None):
         """Activate user (admin only)"""
-        # FIX #2: Safe is_admin check
+        
         if not getattr(request.user, 'is_admin', False):
             return Response(
                 {'error': 'Permission denied'}, 
@@ -160,7 +160,7 @@ class UserViewSet(viewsets.ModelViewSet):
         
         user = self.get_object()
         
-        # FIX #4: Prevent self-deactivation
+        
         if user == request.user:
             return Response(
                 {'error': 'Cannot deactivate your own account'}, 
@@ -178,8 +178,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response({'message': 'User deactivated successfully'})
 
 
-# FIX #5: Either delete this OR keep it (choose one)
-# If you keep it, you'll have two registration endpoints
+
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
