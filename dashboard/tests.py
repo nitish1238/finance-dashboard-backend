@@ -56,9 +56,7 @@ class DashboardTests(TestCase):
         })
         return response.data.get('access')
 
-    # ------------------------------------------------------------------ #
-    #  Summary Endpoint                                                    #
-    # ------------------------------------------------------------------ #
+  
 
     def test_summary_unauthenticated_returns_401(self):
         response = self.client.get('/api/dashboard/summary/')
@@ -108,9 +106,7 @@ class DashboardTests(TestCase):
         # Analyst income is 7000 — if viewer's 3000 leaked, total would be 10000
         self.assertEqual(float(response.data['total_income']), 7000)
 
-    # ------------------------------------------------------------------ #
-    #  Category Breakdown Endpoint                                         #
-    # ------------------------------------------------------------------ #
+   
 
     def test_category_breakdown_unauthenticated_returns_401(self):
         response = self.client.get('/api/dashboard/category-breakdown/')

@@ -11,6 +11,7 @@ from dateutil.relativedelta import relativedelta
 
 class DashboardViewSet(viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
+    serializer_class = None
 
     def get_queryset(self):
         return self.request.user.transactions.all()

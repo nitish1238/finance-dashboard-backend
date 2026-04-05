@@ -31,7 +31,7 @@ class Transaction(models.Model):
         ]
     }
     
-    # Flatten categories for choices
+    
     CATEGORY_CHOICES = sum([cats for cats in CATEGORIES.values()], [])
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions')

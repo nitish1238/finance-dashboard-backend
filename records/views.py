@@ -16,13 +16,17 @@ class TransactionViewSet(ModelViewSet):
     def get_queryset(self):
         user = self.request.user
 
-        
-        if user.role == 'admin':
+    
+        if not user.is_authenticated:
+            return Transaction.objects.none()
+
+    
+        if getattr(user, "role", None) == 'admin':
             queryset = Transaction.objects.all()
         else:
             queryset = Transaction.objects.filter(user=user)
 
-        
+    
         category = self.request.query_params.get('category')
         start_date = self.request.query_params.get('start_date')
         end_date = self.request.query_params.get('end_date')
