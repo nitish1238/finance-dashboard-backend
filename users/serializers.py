@@ -28,16 +28,17 @@ class UserCreateSerializer(serializers.ModelSerializer):
         if data['password'] != data['confirm_password']:
             raise serializers.ValidationError({"confirm_password": "Passwords do not match"})
         return data
-    
     def create(self, validated_data):
         validated_data.pop('confirm_password')
         password = validated_data.pop('password')
-        user = User(**validated_data)
-        user.set_password(password)
 
-        user.role = 'viewer'   
+        user = User.objects.create_user(
+        password=password,
+        role='viewer',   # default role
+        **validated_data
+        )
 
-        user.save()
+        return user
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
