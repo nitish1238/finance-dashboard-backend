@@ -1,11 +1,11 @@
-# 🚀 Finance Dashboard Backend
+#  Finance Dashboard Backend
 
 A backend system for managing financial records with role-based access control and dashboard analytics.
 This project demonstrates backend architecture, API design, and business logic implementation using Django REST Framework.
 
 ---
 
-## 📌 Overview
+##  Overview
 
 This project implements a finance dashboard backend where different users interact with financial data based on roles.
 
@@ -18,17 +18,17 @@ It demonstrates:
 
 ---
 
-## 🎯 Key Highlights
+##  Key Highlights
 
-* ✅ Fully test-driven backend (**98/98 tests passing**)
-* 🔐 Role-based permissions (Admin / Analyst / Viewer)
-* 📊 Dashboard analytics (trends, breakdowns, insights)
-* 🔍 Advanced filtering, search, and sorting
-* 🌐 Deployed API with Swagger documentation
+*  Fully test-driven backend (**98/98 tests passing**)
+*  Role-based permissions (Admin / Analyst / Viewer)
+*  Dashboard analytics (trends, breakdowns, insights)
+*  Advanced filtering, search, and sorting
+*  Deployed API with Swagger documentation
 
 ---
 
-## 👥 User Roles
+##  User Roles
 
 | Role        | Permissions                                |
 | ----------- | ------------------------------------------ |
@@ -38,7 +38,7 @@ It demonstrates:
 
 ---
 
-## 💰 Features
+##  Features
 
 ### 1. Financial Records Management
 
@@ -95,7 +95,7 @@ It demonstrates:
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 * **Backend:** Django, Django REST Framework
 * **Authentication:** JWT
@@ -104,7 +104,7 @@ It demonstrates:
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 finance-dashboard-backend/
@@ -119,7 +119,7 @@ finance-dashboard-backend/
 
 ---
 
-## ⚙️ Setup Instructions
+##  Setup Instructions
 
 ### 1. Clone Repository
 
@@ -156,7 +156,7 @@ python manage.py runserver
 
 ---
 
-## 🧪 Testing
+##  Testing
 
 All backend tests pass successfully:
 
@@ -164,13 +164,13 @@ All backend tests pass successfully:
 python manage.py test
 ```
 
-✅ **98/98 tests passing**
+ **98/98 tests passing**
 
 ---
 
-## 📡 API Endpoints
+##  API Endpoints
 
-### 🔐 Authentication
+###  Authentication
 
 ```
 POST /api/users/register/
@@ -180,7 +180,7 @@ POST /api/users/auth/refresh/
 
 ---
 
-### 👤 Users
+###  Users
 
 ```
 GET    /api/users/
@@ -199,7 +199,7 @@ POST   /api/users/{id}/deactivate/
 
 ---
 
-### 💰 Financial Records
+###  Financial Records
 
 ```
 GET    /api/records/
@@ -213,7 +213,7 @@ GET    /api/records/categories/
 GET    /api/records/statistics/
 ```
 
-#### 🔍 Filtering Examples
+####  Filtering Examples
 
 ```
 /api/records/?transaction_type=income
@@ -226,7 +226,7 @@ GET    /api/records/statistics/
 
 ---
 
-### 📊 Dashboard
+###  Dashboard
 
 ```
 GET /api/dashboard/summary/
@@ -238,7 +238,7 @@ GET /api/dashboard/financial-health/
 
 ---
 
-### 📚 API Documentation
+###  API Documentation
 
 ```
 GET /api/docs/
@@ -247,7 +247,7 @@ GET /api/schema/
 
 ---
 
-## 🔍 Example Request
+##  Example Request
 
 ### Login
 
@@ -274,7 +274,7 @@ GET /api/schema/
 
 ---
 
-## 📤 Example Response
+##  Example Response
 
 ```json
 {
@@ -292,7 +292,7 @@ GET /api/schema/
 
 ---
 
-## 🌐 Deployment
+##  Deployment
 
 **Base URL:**
 https://finance-dashboard-backend-jv22.onrender.com
@@ -302,7 +302,7 @@ https://finance-dashboard-backend-jv22.onrender.com/api/docs/
 
 ---
 
-## 🧠 Assumptions
+##  Assumptions
 
 * Categories are predefined based on transaction type
 * Large expenses (>10000) are restricted
@@ -311,7 +311,7 @@ https://finance-dashboard-backend-jv22.onrender.com/api/docs/
 
 ---
 
-## ⚙️ Design Decisions
+##  Design Decisions
 
 * Modular app structure (users, records, dashboard)
 * Role-based permissions enforced at API level
@@ -320,7 +320,7 @@ https://finance-dashboard-backend-jv22.onrender.com/api/docs/
 
 ---
 
-## 🚀 Future Improvements
+##  Future Improvements
 
 * PostgreSQL database
 * Docker support
@@ -330,13 +330,13 @@ https://finance-dashboard-backend-jv22.onrender.com/api/docs/
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
 **Nitish Kumar**
 
 ---
 
-## 📌 Final Note
+##  Final Note
 
 This project focuses on:
 
